@@ -32,8 +32,10 @@ Along with the :class:`Entity` helper class.
 Classes
 -------
 '''
-
-from datetime import datetime
+try:
+    from django.utils import timezone as datetime
+except ImportError:
+    from datetime import datetime
 
 from django.db import models
 from django.core.exceptions import ValidationError
