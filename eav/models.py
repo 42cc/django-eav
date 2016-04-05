@@ -32,10 +32,7 @@ Along with the :class:`Entity` helper class.
 Classes
 -------
 '''
-try:
-    from django.utils import timezone as datetime
-except ImportError:
-    from datetime import datetime
+from django.utils import timezone
 
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -179,7 +176,7 @@ class Attribute(models.Model):
                             help_text=_(u"User-friendly attribute name"))
 
     site = models.ForeignKey(Site, verbose_name=_(u"site"),
-                             default=Site.objects.get_current)
+                             default=settings.SITE_ID)
 
     slug = EavSlugField(_(u"slug"), max_length=50, db_index=True,
                           help_text=_(u"Short unique attribute label"))
@@ -200,7 +197,7 @@ class Attribute(models.Model):
     datatype = EavDatatypeField(_(u"data type"), max_length=6,
                                 choices=DATATYPE_CHOICES)
 
-    created = models.DateTimeField(_(u"created"), default=datetime.now,
+    created = models.DateTimeField(_(u"created"), default=timezone.now,
                                    editable=False)
 
     modified = models.DateTimeField(_(u"modified"), auto_now=True)
@@ -356,7 +353,7 @@ class Value(models.Model):
     value_object = generic.GenericForeignKey(ct_field='generic_value_ct',
                                              fk_field='generic_value_id')
 
-    created = models.DateTimeField(_(u"created"), default=datetime.now)
+    created = models.DateTimeField(_(u"created"), default=timezone.now)
     modified = models.DateTimeField(_(u"modified"), auto_now=True)
 
     attribute = models.ForeignKey(Attribute, db_index=True,
